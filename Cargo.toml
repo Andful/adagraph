@@ -1,0 +1,20 @@
+[workspace]
+members = [
+	"adagraph",
+	"adagraph-nauty",
+#	"adagraph-random-graph",
+	"adagraph-separators",
+	"adagraph-serde",
+#	"adagraph-server",
+	"adagraph-induced-subgraph",
+	"adagraph-adjacency-graph",
+	"adagraph-triangulation",
+#	"adagraph-trie",
+	"adagraph-edge-addition-separators",
+#	"adagraph-python",
+#	"adagraph-nardi-separator-decomposition",
+	"adagraph-takadas-recurrance"
+]
+
+[profile.release]
+debug = 1

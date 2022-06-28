@@ -1,0 +1,15 @@
+[package]
+name = "adagraph-edge-addition-separators"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+adagraph = { path = "../adagraph" }
+adagraph-induced-subgraph = { path = "../adagraph-induced-subgraph" }
+adagraph-nauty = { path = "../adagraph-nauty" }
+adagraph-triangulation = { path = "../adagraph-triangulation" }
+#adagraph-serde = { path = "../adagraph-serde/" }
+rand = "0.8.4"
+adagraph-adjacency-graph = { path = "../adagraph-adjacency-graph/" }

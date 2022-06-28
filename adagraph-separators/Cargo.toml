@@ -1,0 +1,29 @@
+[package]
+name = "adagraph-separators"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+adagraph = { path = "../adagraph" }
+adagraph-nauty = { path = "../adagraph-nauty/" }
+#adagraph-random-graph = { path = "../adagraph-random-graph/" }
+adagraph-induced-subgraph = { path = "../adagraph-induced-subgraph/" }
+adagraph-adjacency-graph = { path = "../adagraph-adjacency-graph/" }
+regex = "1.5.4"
+rand = "0.8.4"
+adagraph-triangulation = { path = "../adagraph-triangulation/" }
+rayon = "1.5.3"
+indicatif = "0.17.0-beta.1"
+seq-macro = "0.2.2"
+rand_chacha = "0.3.1"
+quicli = "0.4.0"
+structopt = "0.3.26"
+adagraph-serde = { path = "../adagraph-serde/" }
+crossbeam = "0.8.1"
+adagraph-takadas-recurrance = { path = "../adagraph-takadas-recurrance/" }
+adagraph-edge-addition-separators = { path = "../adagraph-edge-addition-separators/" }
+cpu-time = "1.0.0"
+# adagraph-serde = { path = "../adagraph-serde/" }
+# adagraph-disjoint-set = { path = "../adagraph-disjoint-set/" }

@@ -948,7 +948,7 @@ where
 
     pub(crate) fn get(&self, i: usize) -> BitSet<D> {
         let mut j = self.m - 1;
-        while j > 0 && self.data[(i * self.m + j)] == D::zero() {
+        while j > 0 && self.data[i * self.m + j] == D::zero() {
             j -= 1;
         }
         let data = self.data[(i * self.m)..(i * self.m + j + 1)].to_vec();

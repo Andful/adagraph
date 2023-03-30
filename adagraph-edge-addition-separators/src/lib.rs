@@ -87,11 +87,10 @@ where
         if sets.len() < 2 {
             return (Some(self), None);
         }
-        let sets: [DisjointSetMutRef<'_, V, VS, DisjointSetType<VS>>; 2] =
-            match sets.try_into() {
-                Ok(e) => e,
-                Err(_) => unreachable!(),
-            };
+        let sets: [DisjointSetMutRef<'_, V, VS, DisjointSetType<VS>>; 2] = match sets.try_into() {
+            Ok(e) => e,
+            Err(_) => unreachable!(),
+        };
 
         let [DisjointSetMutRef(_, v_set, mut v_type), DisjointSetMutRef(_, _, mut u_type)] = sets;
 
@@ -467,7 +466,10 @@ where
     }
 }
 
-fn test_separator_consistency<V, VS, S>(separator: &mut Separator<V, VS, S>, graph: &AdjGraph<V, VS, S::Store<VS>>) -> bool
+fn test_separator_consistency<V, VS, S>(
+    separator: &mut Separator<V, VS, S>,
+    graph: &AdjGraph<V, VS, S::Store<VS>>,
+) -> bool
 where
     V: Copy + Ord,
     VS: Set<Element = V>,
@@ -669,7 +671,9 @@ where
         separator_vertex: None,
         separator_size: 0,
         number_full_components: vs.len(),
-        sets: DisjointSet::<V, VS, S, DisjointSetType<VS>>::new(&vs, |_| DisjointSetType::FullComponent),
+        sets: DisjointSet::<V, VS, S, DisjointSetType<VS>>::new(&vs, |_| {
+            DisjointSetType::FullComponent
+        }),
     }];
 
     let mut graph = AdjGraph::<V, VS, S::Store<VS>>::new(vs);

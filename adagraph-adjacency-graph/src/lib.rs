@@ -1,4 +1,3 @@
-#![feature(generic_associated_types)]
 #![feature(drain_filter)]
 use adagraph::prelude::*;
 use adagraph_induced_subgraph::{AsInducedSubgraph, InducedSubgraph};
@@ -56,12 +55,18 @@ where
         }
     }
 
-    pub fn new_from_graph<G>(graph: &G, vertices: Vertices) -> Self where G: VertexSetGraph<VertexIndex=V, VertexSet=Vertices>, {
-        let adjacency = vertices.iter().map(|v| {
-            let mut neighbors = graph.vertex_neighbor_set(v);
-            neighbors.intersect_set(&vertices);
-            (v, neighbors)
-        }).collect();
+    pub fn new_from_graph<G>(graph: &G, vertices: Vertices) -> Self
+    where
+        G: VertexSetGraph<VertexIndex = V, VertexSet = Vertices>,
+    {
+        let adjacency = vertices
+            .iter()
+            .map(|v| {
+                let mut neighbors = graph.vertex_neighbor_set(v);
+                neighbors.intersect_set(&vertices);
+                (v, neighbors)
+            })
+            .collect();
         Self {
             vertices,
             adjacency,

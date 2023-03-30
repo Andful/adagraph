@@ -131,10 +131,7 @@ where
     }
 
     pub fn get_mul_mut(&mut self, vs: &VS) -> Vec<DisjointSetMutRef<V, VS, E>> {
-        let roots = vs
-            .iter()
-            .map(|v| self.get_internal(v))
-            .collect::<VS>();
+        let roots = vs.iter().map(|v| self.get_internal(v)).collect::<VS>();
         self.elements
             .get_mul_mut(&roots)
             .into_iter()
@@ -189,12 +186,7 @@ where
         }
     }
 
-    pub fn union<F>(
-        &mut self,
-        v: V,
-        w: V,
-        f: F,
-    ) -> Option<DisjointSetMutRef<V, VS, E>>
+    pub fn union<F>(&mut self, v: V, w: V, f: F) -> Option<DisjointSetMutRef<V, VS, E>>
     where
         F: FnOnce(E, E) -> E,
     {

@@ -1,4 +1,3 @@
-#![feature(generic_associated_types)]
 use adagraph::prelude::*;
 
 pub trait AsInducedSubgraph: VertexSetGraph {

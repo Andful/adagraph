@@ -43,11 +43,14 @@ where
 impl<G, S> MinimumDegreeOrdering<G, S>
 where
     G: VertexSetGraph,
-    S: StoreWithKey<G::VertexIndex>
+    S: StoreWithKey<G::VertexIndex>,
 {
     pub fn new(graph: &G) -> Self {
         let considered = graph.vertex_set();
-        let adjacency: S::Store<G::VertexSet> = considered.iter().map(|v| (v, graph.vertex_neighbor_set(v))).collect();
+        let adjacency: S::Store<G::VertexSet> = considered
+            .iter()
+            .map(|v| (v, graph.vertex_neighbor_set(v)))
+            .collect();
         Self {
             considered,
             adjacency,
@@ -88,7 +91,8 @@ where
                     .map(|v| (0, v))
                     .collect::<VecDeque<(usize, G::VertexIndex)>>();
 
-                let mut path_weights: S::Store<usize> = new_vertex_set.iter().map(|v| (v, usize::MAX)).collect();
+                let mut path_weights: S::Store<usize> =
+                    new_vertex_set.iter().map(|v| (v, usize::MAX)).collect();
                 self.graph =
                     InducedSubgraph::new(self.graph.get_original_graph(), new_vertex_set.clone());
 
@@ -148,7 +152,10 @@ mod tests {
             .build()
             .unwrap();
 
-        let mut msc = MaximumCardinalitySearchForMinimalTriangulation::<NautyGraph, NautyGraphVertexStoreWrapper>::new(&graph);
+        let mut msc = MaximumCardinalitySearchForMinimalTriangulation::<
+            NautyGraph,
+            NautyGraphVertexStoreWrapper,
+        >::new(&graph);
 
         while let Some(v) = msc.next() {
             println!("{}", v);
@@ -169,8 +176,7 @@ mod tests {
             .build()
             .unwrap();
 
-        let mut md =
-            MinimumDegreeOrdering::<NautyGraph, NautyGraphVertexStoreWrapper>::new(&graph);
+        let mut md = MinimumDegreeOrdering::<NautyGraph, NautyGraphVertexStoreWrapper>::new(&graph);
 
         while let Some(v) = md.next() {
             println!("{}", v);

@@ -76,10 +76,7 @@ where
         graph.neighbor_set_exclusive(&component)
     }
 
-    fn get_z(
-        neighbors: &G::VertexSet,
-        peo: &S::Store<Option<usize>>,
-    ) -> Option<G::VertexIndex> {
+    fn get_z(neighbors: &G::VertexSet, peo: &S::Store<Option<usize>>) -> Option<G::VertexIndex> {
         neighbors
             .iter()
             .filter_map(|z| peo.get(z).map(|o| (z, o)))
@@ -87,20 +84,12 @@ where
             .map(|(z, _)| z)
     }
 
-    fn update_peo(
-        v: G::VertexIndex,
-        peo: &mut S::Store<Option<usize>>,
-        current_order: &mut usize,
-    ) {
+    fn update_peo(v: G::VertexIndex, peo: &mut S::Store<Option<usize>>, current_order: &mut usize) {
         *peo.get_mut(v).unwrap() = Some(*current_order);
         *current_order -= 1;
     }
 
-    fn update_degree(
-        v: G::VertexIndex,
-        degrees: &mut S::Store<Option<usize>>,
-        v_degree: usize,
-    ) {
+    fn update_degree(v: G::VertexIndex, degrees: &mut S::Store<Option<usize>>, v_degree: usize) {
         *degrees.get_mut(v).unwrap() = Some(v_degree);
     }
 }
@@ -530,7 +519,11 @@ mod tests {
             G,
             S,
             MaximumCardinalitySearchForMinimalTriangulation<'_, G, S>,
-        >::new(&graph, MaximumCardinalitySearchForMinimalTriangulation::new(&graph), &mut BTreeSet::new())
+        >::new(
+            &graph,
+            MaximumCardinalitySearchForMinimalTriangulation::new(&graph),
+            &mut BTreeSet::new(),
+        )
         .collect::<Vec<VS>>();
         println!("separators: {:?}", separators);
     }
@@ -564,7 +557,11 @@ mod tests {
             G,
             S,
             MaximumCardinalitySearchForMinimalTriangulation<'_, G, S>,
-        >::new(&graph, MaximumCardinalitySearchForMinimalTriangulation::new(&graph), &mut BTreeSet::new())
+        >::new(
+            &graph,
+            MaximumCardinalitySearchForMinimalTriangulation::new(&graph),
+            &mut BTreeSet::new(),
+        )
         .collect::<Vec<VS>>();
         println!("separators: {:?}", separators);
     }

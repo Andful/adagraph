@@ -3,8 +3,6 @@
 #![feature(drain_filter)]
 
 use std::fmt::Debug;
-use std::process::exit;
-use std::sync::{mpsc::channel, Arc, Mutex};
 use std::{
     collections::{BTreeSet, VecDeque},
     iter::Iterator,
@@ -300,9 +298,7 @@ where
                 Option<G::VertexIndex>,
             )> = atoms
                 .into_iter()
-                .map(|a| {
-                    (AdjGraph::new_from_graph(graph, a), None)
-                })
+                .map(|a| (AdjGraph::new_from_graph(graph, a), None))
                 .collect();
             let mut separators = Vec::new();
             while let Some((g, v)) = atoms.pop_back() {
@@ -516,8 +512,7 @@ fn main() {
         }
     };
 
-    let graph: NautyGraph = if input_graph.extension().map(|s| s.to_str()) == Some(Some("gr"))
-    {
+    let graph: NautyGraph = if input_graph.extension().map(|s| s.to_str()) == Some(Some("gr")) {
         parse_pace(&content).expect("Error parsing file")
     } else if input_graph.extension().map(|s| s.to_str()) == Some(Some("dimacs")) {
         parse_dimancs(&content).expect("Error parsing file")
@@ -580,59 +575,54 @@ fn main() {
                 .is_none()
         }));
 
-        let mut separators =
-            match args.separator_type {
-                SeparatorType::All { method } => atoms
-                    .into_iter()
-                    .flat_map(|a| {
-                        all_separators::<
-                            InducedSubgraph<NautyGraph>,
-                            NautyGraphVertexStoreWrapper,
-                        >(graph.as_induced_subgraph(a), method)
-                    })
-                    .collect(),
-                SeparatorType::AllAlmostCliques { method } => atoms
-                    .into_iter()
-                    .flat_map(|a| {
-                        all_almost_clique_separators::<
-                            InducedSubgraph<NautyGraph>,
-                            NautyGraphVertexStoreWrapper,
-                        >(graph.as_induced_subgraph(a), method, true)
-                    })
-                    .collect(),
-                SeparatorType::PairwiseParallelAlmostCliques { mine } => {
-                    pairwise_parallel_almost_clique_separators::<
-                        NautyGraph,
-                        NautyGraphVertexStoreWrapper,
-                    >(
-                        graph,
-                        atoms,
-                        mine == SeparatorEnumerationMethodMine::Mine,
-                        true,
+        let mut separators = match args.separator_type {
+            SeparatorType::All { method } => atoms
+                .into_iter()
+                .flat_map(|a| {
+                    all_separators::<InducedSubgraph<NautyGraph>, NautyGraphVertexStoreWrapper>(
+                        graph.as_induced_subgraph(a),
+                        method,
                     )
-                }
-                SeparatorType::Dense { method } => atoms
-                    .into_iter()
-                    .flat_map(|a| {
-                        dense_separators::<
-                            InducedSubgraph<NautyGraph>,
-                            NautyGraphVertexStoreWrapper,
-                        >(graph.as_induced_subgraph(a), method)
-                    })
-                    .collect(),
-                SeparatorType::OfSizeAtMost { k, method } => {
-                    atoms
-                        .into_iter()
-                        .flat_map(|a| {
-                            k_separators::<
-                                InducedSubgraph<NautyGraph>,
-                                NautyGraphVertexStoreWrapper,
-                            >(graph.as_induced_subgraph(a), k, method)
-                        })
-                        .collect()
-                }
-                SeparatorType::Clique => BTreeSet::new(),
-            };
+                })
+                .collect(),
+            SeparatorType::AllAlmostCliques { method } => atoms
+                .into_iter()
+                .flat_map(|a| {
+                    all_almost_clique_separators::<
+                        InducedSubgraph<NautyGraph>,
+                        NautyGraphVertexStoreWrapper,
+                    >(graph.as_induced_subgraph(a), method, true)
+                })
+                .collect(),
+            SeparatorType::PairwiseParallelAlmostCliques { mine } => {
+                pairwise_parallel_almost_clique_separators::<NautyGraph, NautyGraphVertexStoreWrapper>(
+                    graph,
+                    atoms,
+                    mine == SeparatorEnumerationMethodMine::Mine,
+                    true,
+                )
+            }
+            SeparatorType::Dense { method } => atoms
+                .into_iter()
+                .flat_map(|a| {
+                    dense_separators::<InducedSubgraph<NautyGraph>, NautyGraphVertexStoreWrapper>(
+                        graph.as_induced_subgraph(a),
+                        method,
+                    )
+                })
+                .collect(),
+            SeparatorType::OfSizeAtMost { k, method } => atoms
+                .into_iter()
+                .flat_map(|a| {
+                    k_separators::<InducedSubgraph<NautyGraph>, NautyGraphVertexStoreWrapper>(
+                        graph.as_induced_subgraph(a),
+                        k,
+                        method,
+                    )
+                })
+                .collect(),
+            SeparatorType::Clique => BTreeSet::new(),
+        };
         separators.extend(clique_separators);
         separators
     } else {
@@ -646,10 +636,7 @@ fn main() {
             >(graph, method, false),
             SeparatorType::PairwiseParallelAlmostCliques { mine } => {
                 let atoms = vec![graph.vertex_set()];
-                pairwise_parallel_almost_clique_separators::<
-                    NautyGraph,
-                    NautyGraphVertexStoreWrapper,
-                >(
+                pairwise_parallel_almost_clique_separators::<NautyGraph, NautyGraphVertexStoreWrapper>(
                     graph,
                     atoms,
                     mine == SeparatorEnumerationMethodMine::Mine,

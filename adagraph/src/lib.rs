@@ -1,9 +1,5 @@
 //#![warn(missing_docs)]
-#![allow(incomplete_features)]
-#![feature(generic_associated_types)]
 #![feature(associated_type_defaults)]
-#![feature(unboxed_closures)]
-#![feature(fn_traits)]
 
 //! Traits for graph theory
 //!
@@ -186,10 +182,15 @@ where
         S: Set<Element = K>;
     fn iter(&self) -> Self::Iter<'_>;
     fn iter_mut(&mut self) -> Self::IterMut<'_>;
-    fn clone(&self) -> Self where V: Clone;
+    fn clone(&self) -> Self
+    where
+        V: Clone;
 }
 
-pub trait StoreWithKey<K> where K: Copy {
+pub trait StoreWithKey<K>
+where
+    K: Copy,
+{
     type Store<V>: Store<K, V>;
 }
 

@@ -1,5 +1,4 @@
 #![allow(incomplete_features)]
-#![feature(generic_associated_types)]
 #![feature(unboxed_closures)]
 #![feature(fn_traits)]
 #![feature(core_intrinsics)]
@@ -26,14 +25,12 @@ use adagraph_induced_subgraph::{AsInducedSubgraph, InducedSubgraph};
 use bit_set::{BitStore, IncreasingBitSetIterator};
 
 #[derive(Clone, Debug)]
-pub struct NautyGraph
-{
+pub struct NautyGraph {
     n: usize,
     data: BitSetArray<usize>,
 }
 
-impl NautyGraph
-{
+impl NautyGraph {
     fn new(n: usize) -> Self {
         Self {
             n,
@@ -42,8 +39,7 @@ impl NautyGraph
     }
 }
 
-impl VertexAddableGraph for NautyGraph
-{
+impl VertexAddableGraph for NautyGraph {
     fn add_vertex<Args>(&mut self, _: Args) -> GraphEditingResult<&mut Self> {
         self.n += 1;
         self.data
@@ -52,8 +48,7 @@ impl VertexAddableGraph for NautyGraph
     }
 }
 
-impl EdgeAddableGraph for NautyGraph
-{
+impl EdgeAddableGraph for NautyGraph {
     fn add_edge<Args>(&mut self, v: usize, w: usize, _: Args) -> GraphEditingResult<&mut Self> {
         //TODO: check self loops and parallel edges
         if v == w {
@@ -80,8 +75,7 @@ impl EdgeAddableGraph for NautyGraph
     }
 }
 
-impl EdgeRemovableGraph for NautyGraph
-{
+impl EdgeRemovableGraph for NautyGraph {
     fn remove_edge<Args>(&mut self, e: (usize, usize), _: Args) -> GraphEditingResult<&mut Self> {
         let (v, w) = e;
         if v >= self.n {
@@ -102,8 +96,7 @@ impl EdgeRemovableGraph for NautyGraph
     }
 }
 
-impl Graph for NautyGraph
-{
+impl Graph for NautyGraph {
     type VertexIndex = usize;
     type EdgeIndex = (usize, usize);
 
@@ -125,8 +118,7 @@ impl Graph for NautyGraph
     }
 }
 
-impl GraphCount for NautyGraph
-{
+impl GraphCount for NautyGraph {
     fn n_vertices(&self) -> usize {
         self.n
     }
@@ -152,16 +144,14 @@ impl std::iter::Iterator for NautyGraphVertices<'_> {
     }
 }
 
-pub struct NautyGraphEdges<'a>
-{
+pub struct NautyGraphEdges<'a> {
     graph: &'a NautyGraph,
     v: usize,
     vertices: Range<usize>,
     neighbors: Option<IncreasingBitSetIterator<'a, usize>>,
 }
 
-impl<'a> std::iter::Iterator for NautyGraphEdges<'a>
-{
+impl<'a> std::iter::Iterator for NautyGraphEdges<'a> {
     type Item = (usize, usize);
     fn next(&mut self) -> Option<Self::Item> {
         match self.neighbors.as_mut()?.next() {
@@ -178,14 +168,12 @@ impl<'a> std::iter::Iterator for NautyGraphEdges<'a>
     }
 }
 
-pub struct NautyGraphNeighbors<'a>
-{
+pub struct NautyGraphNeighbors<'a> {
     i: usize,
     iter: IncreasingBitSetIterator<'a, usize>,
 }
 
-impl<'a> std::iter::Iterator for NautyGraphNeighbors<'a>
-{
+impl<'a> std::iter::Iterator for NautyGraphNeighbors<'a> {
     type Item = (usize, (usize, usize));
     fn next(&mut self) -> Option<Self::Item> {
         if let Some(j) = self.iter.next() {
@@ -196,8 +184,7 @@ impl<'a> std::iter::Iterator for NautyGraphNeighbors<'a>
     }
 }
 
-impl GraphIterator for NautyGraph
-{
+impl GraphIterator for NautyGraph {
     type Vertices<'a> = NautyGraphVertices<'a>;
     type Edges<'a> = NautyGraphEdges<'a>;
     type Neighbors<'a> = NautyGraphNeighbors<'a>;
@@ -228,8 +215,7 @@ impl GraphIterator for NautyGraph
     }
 }
 
-impl VertexSetGraph for NautyGraph
-{
+impl VertexSetGraph for NautyGraph {
     type VertexSet = BitSet<usize>;
 
     fn vertex_set(&self) -> Self::VertexSet {
@@ -547,8 +533,7 @@ unsafe impl<V> Store<usize, V> for NautyGraphVertexStore<V> {
     }
 }
 
-impl AsInducedSubgraph for NautyGraph
-{
+impl AsInducedSubgraph for NautyGraph {
     type OriginalGraph = Self;
 
     fn as_induced_subgraph<'a>(
@@ -610,8 +595,7 @@ impl<'a, V> Iterator for NautyGraphInducedSubgraphIterMut<'a, V> {
     }
 }
 
-impl BreathFirstSearch for NautyGraph
-{
+impl BreathFirstSearch for NautyGraph {
     type BreathFirstSearchIterator<'a> =
         adagraph::algos::DefaultBreathFirstSearchIteratorVertexSet<'a, Self>;
 }
@@ -620,18 +604,15 @@ impl ConnectedComponentFrom for NautyGraph {}
 
 impl ConnectedComponents for NautyGraph {}
 
-impl BuildableGraph for NautyGraph
-{
+impl BuildableGraph for NautyGraph {
     type Builder = NautyGraphBuilder;
 }
 
-pub struct NautyGraphBuilder
-{
+pub struct NautyGraphBuilder {
     result: std::result::Result<NautyGraph, GraphEditingError>,
 }
 
-impl GraphBuilder for NautyGraphBuilder
-{
+impl GraphBuilder for NautyGraphBuilder {
     type Graph = NautyGraph;
     type VertexSet = BitSet<usize>;
     fn new<Args>(args: Args) -> Self
@@ -719,8 +700,7 @@ impl GraphBuilder for NautyGraphBuilder
     }
 }
 
-impl NautyGraphBuilder
-{
+impl NautyGraphBuilder {
     fn new_with_n(n: usize) -> Self {
         Self {
             result: Ok(NautyGraph::new(n)),

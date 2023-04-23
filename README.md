@@ -2,8 +2,13 @@
 
 Graph library for graph triangulation experimentation
 
+## Installation
+```bash
+cargo install --git https://github.com/Andful/adagraph adagraph-separators
+```
+
 ## Run
 
 ```bash
-cargo run --bin adagraph-separators -- -h
+adagraph-separators -h
 ```
